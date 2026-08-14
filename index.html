@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japón 🇯🇵 - Guía e Itinerario Interactivo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-card {
+      background: rgba(51, 65, 85, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(239, 68, 68, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Custom Checkbox */
+    .task-checkbox {
+      appearance: none;
+      background-color: rgba(15, 23, 42, 0.6);
+      border: 2px solid #64748b;
+      width: 1.3rem;
+      height: 1.3rem;
+      border-radius: 0.35rem;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .task-checkbox::before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: white;
+      font-size: 0.75rem;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+    }
+
+    .task-checkbox:checked {
+      background-color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    .task-checkbox:checked::before {
+      transform: scale(1);
+    }
+
+    .task-checked-text {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    /* Sticky Navigation offset */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+    }
+
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-20">
+
+  <nav class="sticky top-0 z-50 glass-panel border-b border-slate-700/50 shadow-xl px-4 py-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🇯🇵</span>
+        <div>
+          <h1 class="font-extrabold text-base md:text-lg text-white leading-tight">Japón 2026</h1>
+          <p class="text-xs text-slate-400 hidden sm:block">13 - 26 de Noviembre</p>
+        </div>
+      </div>
+
+      <!-- Quick Jump Links -->
+      <div class="flex items-center gap-1.5 overflow-x-auto py-1 max-w-full text-xs no-scrollbar">
+        <a href="#costes" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition flex items-center gap-1 shrink-0">
+          <i class="fa-solid fa-calculator text-emerald-400"></i> Costes
+        </a>
+        <a href="#vuelos" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition flex items-center gap-1 shrink-0">
+          <i class="fa-solid fa-plane text-sky-400"></i> Vuelos y Hoteles
+        </a>
+        <a href="#osaka" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition flex items-center gap-1 shrink-0">
+          <i class="fa-solid fa-city text-rose-400"></i> Osaka
+        </a>
+        <a href="#kioto" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition flex items-center gap-1 shrink-0">
+          <i class="fa-solid fa-torii-gate text-amber-400"></i> Kioto
+        </a>
+      </div>
+
+      <!-- Today Filter Button -->
+      <button id="btn-today-filter" onclick="toggleTodayFilter()" class="text-xs px-3 py-1.5 rounded-lg bg-rose-600/80 hover:bg-rose-600 text-white font-semibold transition flex items-center gap-1.5 shrink-0 shadow-lg shadow-rose-900/30">
+        <i class="fa-solid fa-calendar-day"></i> <span id="today-btn-text">Filtrar Día</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6 space-y-8">
+
+    <!-- PROGRESS BAR & HERO BANNER -->
+    <section class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl select-none">🎌</div>
+      
+      <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+            Cuaderno de Viaje Interactivo
+          </span>
+          <h2 class="text-2xl md:text-3xl font-bold mt-2">Itinerario Completo por Japón</h2>
+          <p class="text-sm text-slate-300 mt-1">Sigue el mapa paso a paso, gestiona tus gastos y marca las paradas completadas.</p>
+        </div>
+
+        <!-- Progress Widget -->
+        <div class="w-full md:w-64 glass-card p-4 rounded-xl border border-slate-700">
+          <div class="flex justify-between text-xs font-medium mb-1.5">
+            <span class="text-slate-300">Progreso del Viaje</span>
+            <span id="progress-percent" class="text-rose-400 font-bold">0%</span>
+          </div>
+          <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full w-0 transition-all duration-300"></div>
+          </div>
+          <div class="text-[11px] text-slate-400 mt-2 text-right" id="progress-count">0 de 0 completados</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE 1: RESUMEN Y CALCULADORA DE COSTES -->
+    <section id="costes" class="glass-panel rounded-2xl p-6 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/60 pb-4">
+        <div>
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-emerald-400"></i> Resumen de Costes del Viaje
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Introduce o modifica libremente los valores por persona o grupo.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Convertidor de Yenes a Euros -->
+          <div class="flex items-center gap-2 text-xs bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <span class="text-slate-400 font-medium"><i class="fa-solid fa-coins text-amber-400"></i> ¥ a €:</span>
+            <input type="number" id="yen-input" value="10000" min="1" step="500" oninput="convertYenToEuro()" class="w-20 text-center bg-slate-900 border border-slate-600 rounded py-0.5 font-bold text-white focus:outline-none focus:border-rose-500">
+            <span id="euro-output" class="text-emerald-400 font-bold min-w-[50px]">62,50 €</span>
+          </div>
+          <!-- Personas en el grupo -->
+          <div class="flex items-center gap-2 text-xs bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <span class="text-slate-400 font-medium">Personas:</span>
+            <input type="number" id="group-size" value="4" min="1" max="20" onchange="calculateCosts()" class="w-12 text-center bg-slate-900 border border-slate-600 rounded py-0.5 font-bold text-white focus:outline-none focus:border-rose-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-700/60 uppercase text-[11px] tracking-wider">
+              <th class="py-2.5 px-3">Concepto</th>
+              <th class="py-2.5 px-3">Detalle</th>
+              <th class="py-2.5 px-3 text-right">Coste pp (€)</th>
+              <th class="py-2.5 px-3 text-right">Total Grupo (€)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-medium">
+            <tr>
+              <td class="py-3 px-3 flex items-center gap-2">
+                <i class="fa-solid fa-plane text-sky-400"></i> Vuelo Gran Canaria - BCN
+              </td>
+              <td class="py-3 px-3 text-slate-400 text-xs">Vueling (Ida/Vuelta + Maleta)</td>
+              <td class="py-3 px-3 text-right">
+                <input type="number" value="45.22" onchange="calculateCosts()" class="cost-input w-20 text-right bg-slate-900/60 border border-slate-700 rounded px-1.5 py-0.5 text-slate-200">
+              </td>
+              <td class="py-3 px-3 text-right text-slate-300 group-total">180.90 €</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 flex items-center gap-2">
+                <i class="fa-solid fa-hotel text-indigo-400"></i> Hotel Barcelona
+              </td>
+              <td class="py-3 px-3 text-slate-400 text-xs">Centre Esplai Hostel (1 noche)</td>
+              <td class="py-3 px-3 text-right">
+                <input type="number" value="28.50" onchange="calculateCosts()" class="cost-input w-20 text-right bg-slate-900/60 border border-slate-700 rounded px-1.5 py-0.5 text-slate-200">
+              </td>
+              <td class="py-3 px-3 text-right text-slate-300 group-total">114.00 €</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 flex items-center gap-2">
+                <i class="fa-solid fa-plane-departure text-rose-400"></i> Vuelos Internacionales
+              </td>
+              <td class="py-3 px-3 text-slate-400 text-xs">Barcelona ↔ Shanghái ↔ Japón</td>
+              <td class="py-3 px-3 text-right">
+                <input type="number" value="750.00" onchange="calculateCosts()" class="cost-input w-20 text-right bg-slate-900/60 border border-slate-700 rounded px-1.5 py-0.5 text-slate-200">
+              </td>
+              <td class="py-3 px-3 text-right text-slate-300 group-total">3000.00 €</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 flex items-center gap-2">
+                <i class="fa-solid fa-building text-amber-400"></i> Hoteles en Japón
+              </td>
+              <td class="py-3 px-3 text-slate-400 text-xs">Osaka (144€) + Kioto (140€) + Tokio (246€)</td>
+              <td class="py-3 px-3 text-right">
+                <input type="number" value="530.00" onchange="calculateCosts()" class="cost-input w-20 text-right bg-slate-900/60 border border-slate-700 rounded px-1.5 py-0.5 text-slate-200">
+              </td>
+              <td class="py-3 px-3 text-right text-slate-300 group-total">2120.00 €</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-3 flex items-center gap-2">
+                <i class="fa-solid fa-ticket text-emerald-400"></i> Excursiones y Entradas
+              </td>
+              <td class="py-3 px-3 text-slate-400 text-xs">Universal Studios + Nara/Kioto Tour + Crucero</td>
+              <td class="py-3 px-3 text-right">
+                <input type="number" value="143.00" onchange="calculateCosts()" class="cost-input w-20 text-right bg-slate-900/60 border border-slate-700 rounded px-1.5 py-0.5 text-slate-200">
+              </td>
+              <td class="py-3 px-3 text-right text-slate-300 group-total">572.00 €</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="border-t-2 border-slate-700 font-extrabold text-base bg-slate-900/40">
+              <td colspan="2" class="py-3.5 px-3 text-white">ESTIMACIÓN TOTAL DEL VIAJE</td>
+              <td id="total-pp" class="py-3.5 px-3 text-right text-emerald-400">1.496,72 €</td>
+              <td id="total-group" class="py-3.5 px-3 text-right text-amber-400">5.986,90 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- BLOQUE VUELOS Y ALOJAMIENTO DETALLADO -->
+    <section id="vuelos" class="space-y-4">
+      <h2 class="text-xl font-bold flex items-center gap-2 border-b border-slate-700 pb-2">
+        <i class="fa-solid fa-plane-departure text-sky-400"></i> Logística de Vuelos y Hoteles
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Vuelos Card -->
+        <div class="glass-panel p-5 rounded-xl space-y-4">
+          <h3 class="font-bold text-sky-300 text-sm uppercase tracking-wide flex items-center gap-2">
+            <i class="fa-solid fa-route"></i> Ruta de Vuelos
+          </h3>
+          
+          <div class="space-y-3 text-xs">
+            <div class="p-3 glass-card rounded-lg border-l-4 border-l-sky-500">
+              <span class="font-bold text-white block">Enlace Gran Canaria ➔ Barcelona</span>
+              <p class="text-slate-300 mt-1">13 Nov: 10:20h ➔ 14:45h (Vueling) | 41,25€</p>
+              <p class="text-slate-400 mt-0.5">25 Nov: 12:00h ➔ 14:35h (Vuelta) | 49,20€</p>
+            </div>
+
+            <div class="p-3 glass-card rounded-lg border-l-4 border-l-rose-500">
+              <span class="font-bold text-white block">Vuelo Principal Ida: Barcelona ➔ Shanghái ➔ Osaka</span>
+              <p class="text-slate-300 mt-1">14 Nov: BCN 10:40 ➔ 05:55 (+1) Shanghái (12h 15m)</p>
+              <p class="text-slate-300">15 Nov: Shanghái 11:30 ➔ 15:00 Osaka KIX (2h 30m)</p>
+            </div>
+
+            <div class="p-3 glass-card rounded-lg border-l-4 border-l-amber-500">
+              <span class="font-bold text-white block">Vuelo Principal Vuelta: Tokio ➔ Shanghái ➔ Barcelona</span>
+              <p class="text-slate-300 mt-1">25 Nov: Tokio 15:00 ➔ 17:25 Shanghái (3h 25m)</p>
+              <p class="text-slate-300">26 Nov: Shanghái 00:45 ➔ 07:25 BCN (13h 40m)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hoteles Card -->
+        <div class="glass-panel p-5 rounded-xl space-y-4">
+          <h3 class="font-bold text-amber-300 text-sm uppercase tracking-wide flex items-center gap-2">
+            <i class="fa-solid fa-hotel"></i> Lista de Alojamiento
+          </h3>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 glass-card rounded-lg flex justify-between items-center">
+              <div>
+                <span class="font-bold text-white block">Barcelona: Centre Esplai Hostel</span>
+                <p class="text-slate-400">13 al 14 de Noviembre (Alojamiento y desayuno)</p>
+                <p class="text-emerald-400 font-semibold mt-0.5">114€ Total / 28,50€ pp (4 pax)</p>
+              </div>
+              <a href="https://maps.google.com/?q=Centre+Esplai+Hostel+El+Prat+de+Llobregat" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </a>
+            </div>
+
+            <div class="p-3 glass-card rounded-lg flex justify-between items-center border-l-4 border-l-rose-500">
+              <div>
+                <span class="font-bold text-white block">Osaka: Sotetsu Fresa Inn Kitahama</span>
+                <p class="text-slate-400">15 al 19 de Noviembre (Desayuno incluido)</p>
+                <p class="text-emerald-400 font-semibold mt-0.5">575€ Total / 144€ pp</p>
+              </div>
+              <a href="https://maps.google.com/?q=Sotetsu+Fresa+Inn+Osaka+Kitahama" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </a>
+            </div>
+
+            <div class="p-3 glass-card rounded-lg flex justify-between items-center border-l-4 border-l-amber-500">
+              <div>
+                <span class="font-bold text-white block">Kioto: Village Kyoto</span>
+                <p class="text-slate-400">19 al 22 de Noviembre (Desayuno incluido)</p>
+                <p class="text-emerald-400 font-semibold mt-0.5">560€ Total / 140€ pp</p>
+              </div>
+              <a href="https://maps.google.com/?q=Village+Kyoto+Hotel" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </a>
+            </div>
+
+            <div class="p-3 glass-card rounded-lg flex justify-between items-center border-l-4 border-l-indigo-500">
+              <div>
+                <span class="font-bold text-white block">Tokio: Rose Garden Shinjuku</span>
+                <p class="text-slate-400">22 al 25 de Noviembre (Desayuno incluido)</p>
+                <p class="text-emerald-400 font-semibold mt-0.5">981€ Total / 246€ pp</p>
+              </div>
+              <a href="https://maps.google.com/?q=Hotel+Rose+Garden+Shinjuku+Tokyo" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE OSAKA -->
+    <section id="osaka" class="space-y-6">
+      <div class="border-b border-slate-700 pb-3 flex items-center justify-between">
+        <h2 class="text-2xl font-extrabold flex items-center gap-2 text-rose-400">
+          <i class="fa-solid fa-city"></i> Tramo 1: Osaka (15 - 19 Noviembre)
+        </h2>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20">4 Días</span>
+      </div>
+
+      <!-- DÍA 1 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-15" open>
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 font-extrabold flex items-center justify-center text-sm border border-rose-500/30">D1</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 1 (15 de Noviembre): Llegada a Osaka y Dotonbori
+              </h3>
+              <p class="text-xs text-slate-400">Aterrizaje KIX ➔ Trámites ➔ Desplazamiento ➔ Paseo nocturno</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-5 border-t border-slate-800">
+          <!-- Paso a Paso Aeropuerto -->
+          <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200 space-y-2">
+            <span class="font-bold text-sm flex items-center gap-1.5"><i class="fa-solid fa-plane-arrival"></i> Lo primero que haces al aterrizar (15:00h):</span>
+            <ul class="list-disc list-inside space-y-1 text-slate-300">
+              <li><strong>Inmigración y maletas:</strong> Cuenta aprox. 45 minutos.</li>
+              <li><strong>Saca efectivo:</strong> En Japón se usa bastante. Busca ATM de 7-Eleven o Japan Post ATM.</li>
+              <li><strong>Compra la tarjeta ICOCA:</strong> En máquinas verdes JR o taquillas. Carga recomendada: 3.000–5.000 yenes. Sirve para metro, tren, konbinis y máquinas.</li>
+            </ul>
+          </div>
+
+          <!-- Pasos de Transporte -->
+          <div class="space-y-3">
+            <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+              <input type="checkbox" id="task-d1-1" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+              <div class="flex-grow space-y-1">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <label for="task-d1-1" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                    <i class="fa-solid fa-train-subway text-sky-400"></i> Desplazamiento KIX al Hotel Sotetsu Fresa Inn Kitahama
+                  </label>
+                  <a href="https://maps.google.com/?q=Sotetsu+Fresa+Inn+Osaka+Kitahama" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-location-dot"></i> Maps
+                  </a>
+                </div>
+                <div class="text-xs text-slate-300 space-y-1 mt-1">
+                  <p><strong>Paso 1:</strong> En el aeropuerto sigue los carteles: "Nankai Railway".</p>
+                  <p><strong>Paso 2:</strong> Coge Nankai Airport Express o Limited Express Rapit dirección Namba (40-45 min).</p>
+                  <p><strong>Paso 3:</strong> Bájate en Tengachaya Station y haz transbordo.</p>
+                  <p><strong>Paso 4:</strong> Cambia a Osaka Metro Sakaisuji Line dirección Kitahama.</p>
+                  <p><strong>Paso 5:</strong> Bájate en Kitahama Station. Desde Exit 6 son 2 min andando al hotel.</p>
+                  <p class="text-amber-300 font-medium">Tiempo total: 60-70 min | Precio: 1.000-1.500 yenes (6-10€).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Checkin y Paseo -->
+            <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+              <input type="checkbox" id="task-d1-2" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+              <div class="flex-grow space-y-1">
+                <label for="task-d1-2" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-hotel text-indigo-400"></i> Check-in en el Hotel y Descanso
+                </label>
+                <p class="text-xs text-slate-300">Llegar, dejar maletas, descansar un poco y prepararnos para la noche.</p>
+              </div>
+            </div>
+
+            <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+              <input type="checkbox" id="task-d1-3" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+              <div class="flex-grow space-y-1">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <label for="task-d1-3" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                    <i class="fa-solid fa-ship text-indigo-400"></i> Paseo por Dotonbori y Crucero Fluvial
+                  </label>
+                  <a href="https://gyg.me/bd6ymT6h" target="_blank" class="text-xs px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold transition flex items-center gap-1">
+                    <i class="fa-solid fa-ticket"></i> Ticket (11€)
+                  </a>
+                </div>
+                <p class="text-xs text-slate-300">Ir a Kitahama Station, coger Sakaisuji Line hasta Nagahoribashi y caminar 10 min. Opcional: Crucero por el río Dotonbori.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                  <div class="p-2 bg-slate-900/50 rounded border border-slate-700/50 text-xs">
+                    <strong class="text-rose-400 block mb-1">Glico Man:</strong> Emblemático letrero luminoso de un atleta corriendo en pista azul.
+                  </div>
+                  <div class="p-2 bg-slate-900/50 rounded border border-slate-700/50 text-xs">
+                    <strong class="text-amber-400 block mb-1">Hozenji Yokocho:</strong> Callejón adoquinado histórico oculto cerca del bullicio.
+                  </div>
+                  <div class="p-2 bg-slate-900/50 rounded border border-slate-700/50 text-xs">
+                    <strong class="text-sky-400 block mb-1">Shinsaibashi:</strong> Principal calle comercial cubierta de tiendas.
+                  </div>
+                  <div class="p-2 bg-slate-900/50 rounded border border-slate-700/50 text-xs">
+                    <strong class="text-emerald-400 block mb-1">Don Quijote:</strong> Famoso centro comercial con su gigante noria ovalada en la fachada.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cenas y extra -->
+            <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+              <input type="checkbox" id="task-d1-4" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+              <div class="flex-grow space-y-1">
+                <label for="task-d1-4" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-bowl-food text-amber-400"></i> Opciones de Cena y Mirador Nocturno
+                </label>
+                <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                  <li><strong>Ramen 24h:</strong> ICHIRAN Dotonbori - South Building. Ideal para comer rápido y auténtico.</li>
+                  <li><strong>Okonomiyaki:</strong> Houzenji Sanpei (estilo Osaka en zona preciosa) o Okonomiyaki Sakaba O (más local y tranquilo).</li>
+                  <li><strong>Opcional Extra:</strong> Subir de noche al mirador del Umeda Sky Building.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- DÍA 2 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-16">
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 font-extrabold flex items-center justify-center text-sm border border-rose-500/30">D2</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 2 (16 de Noviembre): Universal Studios Japan (USJ)
+              </h3>
+              <p class="text-xs text-slate-400">Super Nintendo World ➔ Atracciones principales ➔ Consejos de acceso</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-4 border-t border-slate-800">
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d2-1" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d2-1" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-gamepad text-emerald-400"></i> Entrada Studio Pass y App Oficial
+                </label>
+                <a href="https://book.osaka-tickets.com/es/book/28618/select/" target="_blank" class="text-xs px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold transition">
+                  <i class="fa-solid fa-ticket"></i> Reservar
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Compra Studio Pass (y Express Pass si es posible). Usa la app oficial para ver colas en tiempo real, mapa y reservar acceso a Super Nintendo World.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d2-2" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <label for="task-d2-2" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                <i class="fa-solid fa-star text-amber-400"></i> Atracciones Prioritarias y Truco de Apertura
+              </label>
+              <p class="text-xs text-slate-300"><strong>Top atracciones:</strong> Mario Kart: Koopa's Challenge, Donkey Kong Country, Harry Potter Forbidden Journey, Flying Dinosaur y Hollywood Dream.</p>
+              <p class="text-xs text-amber-300 mt-1"><strong>Truco importante:</strong> Llega 45-60 minutos antes de abrir. Mucha gente entra corriendo a Nintendo World para asegurar acceso temprano.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- DÍA 3 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-17">
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 font-extrabold flex items-center justify-center text-sm border border-rose-500/30">D3</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 3 (17 de Noviembre): Excursión Nara, Arashiyama y Fushimi Inari
+              </h3>
+              <p class="text-xs text-slate-400">Tour guiado completo de 1 Día (08:00 a 20:00h)</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-4 border-t border-slate-800">
+          <div class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-200 space-y-2">
+            <div class="flex justify-between items-center flex-wrap gap-2">
+              <div>
+                <span class="font-bold block">Punto de Encuentro (07:40h - Llegar 20 min antes):</span>
+                <p>Salida 2 de la estación Kintetsu Nippombashi en Osaka, bajo el cartel de «播磨屋».</p>
+              </div>
+              <a href="https://maps.google.com/?q=Kintetsu-Nippombashi+Station+Exit+2" target="_blank" class="text-xs px-2.5 py-1.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold transition">
+                <i class="fa-solid fa-map-pin"></i> Ver Mapa
+              </a>
+            </div>
+            <p class="text-[11px] text-slate-300">El guía te esperará con bandera o muñeca identificativa. Revisa tu correo el día anterior antes de las 18:00h para datos de contacto y fotos del punto exacto.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="glass-card p-3 rounded-xl space-y-1 border-t-2 border-t-amber-400">
+              <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-paw text-amber-400"></i> Parque de Nara
+              </span>
+              <p class="text-slate-300">Alimentar a más de 1000 ciervos sagrados salvajes pero mansos que deambulan libremente.</p>
+            </div>
+
+            <div class="glass-card p-3 rounded-xl space-y-1 border-t-2 border-t-rose-400">
+              <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-torii-gate text-rose-400"></i> Fushimi Inari-Taisha
+              </span>
+              <p class="text-slate-300">Recorrido por los miles de pórticos torii rojos (Senbon Torii) y escribir deseos en ema con forma de zorro.</p>
+            </div>
+
+            <div class="glass-card p-3 rounded-xl space-y-1 border-t-2 border-t-emerald-400">
+              <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-tree text-emerald-400"></i> Arashiyama
+              </span>
+              <p class="text-slate-300">Bosque de bambú, Santuario Nonomiya, Templo Tenryu-ji, Puente Togetsukyo y Bosque de Kimonos.</p>
+            </div>
+          </div>
+          
+          <div class="text-right">
+            <a href="https://gyg.me/e5Q5nUF4" target="_blank" class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold transition">
+              <i class="fa-solid fa-ticket"></i> Ver Actividad GetYourGuide (42€)
+            </a>
+          </div>
+        </div>
+      </details>
+
+      <!-- DÍA 4 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-18">
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 font-extrabold flex items-center justify-center text-sm border border-rose-500/30">D4</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 4 (18 de Noviembre): Lo mejor de Osaka Urbana
+              </h3>
+              <p class="text-xs text-slate-400">Castillo de Osaka ➔ Mercado Kuromon ➔ Shinsekai ➔ Umeda Sky</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-3 border-t border-slate-800">
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d4-1" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d4-1" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-chess-rook text-amber-400"></i> Mañana (9:00 - 12:00): Castillo de Osaka y Jardines
+                </label>
+                <a href="https://maps.google.com/?q=Osaka+Castle" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Maps
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Símbolo de la unificación del siglo XVI. Recorre el parque exterior, la estructura principal de 5 pisos (con museo interior de armaduras samurái), el mirador panorámico 360° y los hermosos jardines Nishinomaru.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d4-2" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d4-2" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-fish text-sky-400"></i> Mediodía (12:00 - 14:00): Mercado Kuromon Ichiba
+                </label>
+                <a href="https://maps.google.com/?q=Kuromon+Ichiba+Market" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Maps
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Conocido como "la cocina de Osaka", perfecto para degustar marisco fresco, brochetas wagyu y gastronomía callejera local.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d4-3" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d4-3" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-building-ngo text-rose-400"></i> Tarde / Atardecer: Shinsekai, Umeda Sky y Nakanoshima
+                </label>
+                <a href="https://maps.google.com/?q=Umeda+Sky+Building" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Umeda Sky
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Visita el barrio retro Shinsekai y la torre Tsütenkaku. Disfruta el atardecer en el mirador flotante de Umeda Sky Building. Si sobra tiempo, da un paseo por Nakanoshima (río y edificios históricos).</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- BLOQUE KIOTO -->
+    <section id="kioto" class="space-y-6">
+      <div class="border-b border-slate-700 pb-3 flex items-center justify-between">
+        <h2 class="text-2xl font-extrabold flex items-center gap-2 text-amber-400">
+          <i class="fa-solid fa-torii-gate"></i> Tramo 2: Kioto (19 - 22 Noviembre)
+        </h2>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">3 Días</span>
+      </div>
+
+      <!-- DÍA 5 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-19">
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 font-extrabold flex items-center justify-center text-sm border border-amber-500/30">D5</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 5 (19 de Noviembre): Llegada a Kioto y Higashiyama Tradicional
+              </h3>
+              <p class="text-xs text-slate-400">Trayecto a Kioto ➔ Sannenzaka ➔ Kiyomizu-dera ➔ Paseo del Filósofo ➔ Gion</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-3 border-t border-slate-800">
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d5-1" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <label for="task-d5-1" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                <i class="fa-solid fa-train text-sky-400"></i> Mañana: Trayecto Osaka ➔ Kioto y Check-in
+              </label>
+              <p class="text-xs text-slate-300">Tren desde Osaka (15-30 min) hasta la estación de Kioto. Llegada al hotel Village Kyoto, dejar maletas y check-in.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d5-2" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d5-2" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-vihara text-amber-400"></i> Tarde: Sannenzaka, Kiyomizu-dera y Paseo del Filósofo
+                </label>
+                <a href="https://maps.google.com/?q=Kiyomizu-dera+Kyoto" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Maps
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Paseo relajado por las peatonales Sannenzaka y Ninenzaka probando dulces de matcha. Sube al templo Kiyomizu-dera para contemplar las vistas panorámicas desde su gran terraza de madera. Termina recorriendo a tu ritmo el apacible Paseo del Filósofo junto al canal.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d5-3" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d5-3" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-moon text-indigo-400"></i> Noche: Barrio de Gion y Hanamikoji Street
+                </label>
+                <a href="https://maps.google.com/?q=Hanamikoji+Street+Gion+Kyoto" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Gion
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Paseo nocturno por el histórico barrio de Gion entre casas de té tradicionales iluminadas por faroles.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- DÍA 6 -->
+      <details class="day-card glass-panel rounded-2xl border border-slate-700/80 overflow-hidden group" data-date="2026-11-20">
+        <summary class="p-4 sm:p-5 flex items-center justify-between cursor-pointer select-none bg-slate-800/40 hover:bg-slate-800/80 transition">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 font-extrabold flex items-center justify-center text-sm border border-amber-500/30">D6</span>
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                Día 6 (20 de Noviembre): El esplendor dorado y el centro histórico
+              </h3>
+              <p class="text-xs text-slate-400">Kinkaku-ji ➔ Ryoan-ji ➔ Castillo Nijō ➔ Mercado Nishiki</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+        </summary>
+
+        <div class="p-5 space-y-3 border-t border-slate-800">
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d6-1" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d6-1" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-sun text-amber-300"></i> Mañana: Kinkaku-ji (Pabellón Dorado) y Ryoan-ji
+                </label>
+                <a href="https://maps.google.com/?q=Kinkaku-ji+Kyoto" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Maps
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Visita el templo Kinkaku-ji para admirar sus dos pisos superiores recubiertos en pan de oro reflejados sobre el estanque. A poca distancia a pie, explora Ryoan-ji, famoso por albergar el jardín seco meditativo (karesansui) más célebre de Japón (UNESCO).</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-3.5 rounded-xl flex items-start gap-3">
+            <input type="checkbox" id="task-d6-2" class="task-checkbox mt-1 shrink-0" onchange="updateProgress()">
+            <div class="flex-grow space-y-1">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <label for="task-d6-2" class="font-bold text-sm text-slate-100 cursor-pointer flex items-center gap-2">
+                  <i class="fa-solid fa-chess-rook text-amber-400"></i> Tarde y Noche: Castillo Nijō y Mercado Nishiki
+                </label>
+                <a href="https://maps.google.com/?q=Nishiki+Market+Kyoto" target="_blank" class="text-xs px-2 py-1 rounded bg-slate-800 text-sky-400 hover:bg-slate-700 transition">
+                  <i class="fa-solid fa-location-dot"></i> Nishiki
+                </a>
+              </div>
+              <p class="text-xs text-slate-300">Visita el Castillo Nijō (residencia del primer shogun del período Edo) y camina sobre sus singulares "suelos del ruiseñor". Termina la jornada cenando en el Mercado Nishiki ("la cocina de Kioto"), repleto de puestos de comida tradicional.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    // Currency conversion rate (approximate 1 JPY to EUR, e.g. 1 EUR = ~160 JPY or 1 JPY = 0.00625 EUR)
+    const YEN_TO_EUR_RATE = 0.00625;
+
+    function convertYenToEuro() {
+      const yenVal = parseFloat(document.getElementById('yen-input').value) || 0;
+      const euroVal = yenVal * YEN_TO_EUR_RATE;
+      document.getElementById('euro-output').innerText = euroVal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    // Calculate Costs Dynamically
+    function calculateCosts() {
+      const groupSize = parseInt(document.getElementById('group-size').value) || 1;
+      const inputs = document.querySelectorAll('.cost-input');
+      const totals = document.querySelectorAll('.group-total');
+      
+      let grandTotalPP = 0;
+
+      inputs.forEach((input, idx) => {
+        const valPP = parseFloat(input.value) || 0;
+        const valGroup = valPP * groupSize;
+        
+        totals[idx].innerText = valGroup.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        grandTotalPP += valPP;
+      });
+
+      const grandTotalGroup = grandTotalPP * groupSize;
+
+      document.getElementById('total-pp').innerText = grandTotalPP.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      document.getElementById('total-group').innerText = grandTotalGroup.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    // Interactive Checkboxes & Progress Tracker
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('.task-checkbox');
+      const total = checkboxes.length;
+      let checkedCount = 0;
+
+      checkboxes.forEach(cb => {
+        const label = cb.closest('.glass-card').querySelector('label');
+        if (cb.checked) {
+          checkedCount++;
+          if (label) label.classList.add('task-checked-text');
+        } else {
+          if (label) label.classList.remove('task-checked-text');
+        }
+      });
+
+      const percentage = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+      document.getElementById('progress-bar').style.width = percentage + '%';
+      document.getElementById('progress-percent').innerText = percentage + '%';
+      document.getElementById('progress-count').innerText = `${checkedCount} de ${total} completados`;
+
+      // Save state to localStorage
+      const state = {};
+      checkboxes.forEach(cb => { state[cb.id] = cb.checked; });
+      localStorage.setItem('japan_trip_tasks_v2', JSON.stringify(state));
+    }
+
+    // Load Checkbox States
+    function loadProgress() {
+      const saved = localStorage.getItem('japan_trip_tasks_v2');
+      if (saved) {
+        const state = JSON.parse(saved);
+        Object.keys(state).forEach(id => {
+          const cb = document.getElementById(id);
+          if (cb) cb.checked = state[id];
+        });
+      }
+      updateProgress();
+    }
+
+    // Filter "Solo Hoy"
+    let todayFilterActive = false;
+    function toggleTodayFilter() {
+      todayFilterActive = !todayFilterActive;
+      const btnText = document.getElementById('today-btn-text');
+      const dayCards = document.querySelectorAll('.day-card');
+      
+      const now = new Date();
+      const currentDateStr = now.toISOString().split('T')[0];
+
+      if (todayFilterActive) {
+        btnText.innerText = "Ver Todo";
+        dayCards.forEach(card => {
+          const cardDate = card.getAttribute('data-date');
+          if (cardDate === currentDateStr) {
+            card.style.display = "block";
+            card.setAttribute('open', 'true');
+          } else {
+            card.style.display = "none";
+          }
+        });
+      } else {
+        btnText.innerText = "Filtrar Día";
+        dayCards.forEach(card => {
+          card.style.display = "block";
+        });
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      calculateCosts();
+      convertYenToEuro();
+      loadProgress();
+    });
+  </script>
+</body>
+</html>
